@@ -13,7 +13,7 @@
   }
 
   .page-transition {
-    @apply animate-in fade-in duration-300;
+    @apply transition-opacity duration-300;
   }
 
   .empty-state {
