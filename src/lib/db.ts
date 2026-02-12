@@ -531,47 +531,37 @@ export async function seedDatabase() {
   const userCount = await prisma.user.count();
   if (userCount > 0) return;
 
-  // Create users
+  // Create users with encrypted passwords
   const users = await Promise.all([
-    prisma.user.create({
-      data: {
-        name: '张三',
-        department: '技术部',
-        role: 'lead',
-        password: 'zhangsan123',
-      },
+    createUser({
+      name: '张三',
+      department: '开发组',
+      role: 'lead',
+      password: 'Dev123!',
     }),
-    prisma.user.create({
-      data: {
-        name: '李四',
-        department: '技术部',
-        role: 'member',
-        password: 'lisi123',
-      },
+    createUser({
+      name: '李四',
+      department: '开发组',
+      role: 'member',
+      password: 'Dev123!',
     }),
-    prisma.user.create({
-      data: {
-        name: '王五',
-        department: '产品部',
-        role: 'member',
-        password: 'wangwu123',
-      },
+    createUser({
+      name: '王五',
+      department: '测试组',
+      role: 'member',
+      password: 'Dev123!',
     }),
-    prisma.user.create({
-      data: {
-        name: '赵六',
-        department: '设计部',
-        role: 'member',
-        password: 'zhaoliu123',
-      },
+    createUser({
+      name: '赵六',
+      department: '设计组',
+      role: 'member',
+      password: 'Dev123!',
     }),
-    prisma.user.create({
-      data: {
-        name: '孙七',
-        department: '管理层',
-        role: 'admin',
-        password: 'sunqi123',
-      },
+    createUser({
+      name: '孙七',
+      department: '管理层',
+      role: 'admin',
+      password: 'Dev123!',
     }),
   ]);
 

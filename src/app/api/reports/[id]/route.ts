@@ -4,10 +4,11 @@ import { getReportById } from '@/lib/db';
 // GET /api/reports/[id] - Get report by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const report = await getReportById(params.id);
+    const { id } = await params;
+    const report = await getReportById(id);
 
     if (!report) {
       return NextResponse.json(
@@ -42,14 +43,15 @@ export async function GET(
 // PUT /api/reports/[id] - Update report
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { projectIds, completed, inProgress, problems, tomorrowPlan } = await request.json();
     
     // Check if report exists
     const { getReportById, updateReport } = await import('@/lib/db');
-    const existingReport = await getReportById(params.id);
+    const existingReport = await getReportById(id);
     
     if (!existingReport) {
       return NextResponse.json(
@@ -78,7 +80,7 @@ export async function PUT(
     }
 
     // Update report using Prisma
-    const report = await updateReport(params.id, updates);
+    const report = await updateReport(id, updates);
 
     return NextResponse.json({
       success: true,
@@ -107,12 +109,13 @@ export async function PUT(
 // DELETE /api/reports/[id] - Delete report
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Check if report exists
     const { getReportById, deleteReport } = await import('@/lib/db');
-    const existingReport = await getReportById(params.id);
+    const existingReport = await getReportById(id);
     
     if (!existingReport) {
       return NextResponse.json(
@@ -122,7 +125,7 @@ export async function DELETE(
     }
 
     // Delete report using Prisma
-    await deleteReport(params.id);
+    await deleteReport(id);
 
     return NextResponse.json({ success: true });
   } catch (error) {

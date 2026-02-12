@@ -53,7 +53,7 @@ export default function NewReportPage() {
       if (data.projects) {
         // Filter projects that the current user is a member of
         const userProjects = data.projects.filter(
-          (p: Project) => p.status === 'active' && p.members.includes(currentUser!.id)
+          (p: Project) => p.status === 'active' && (p.members as string[]).includes(currentUser!.id)
         );
         setProjects(userProjects);
       }

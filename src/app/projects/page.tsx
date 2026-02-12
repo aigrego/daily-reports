@@ -113,7 +113,7 @@ export default function ProjectsPage() {
     setFormName(project.name);
     setFormDescription(project.description);
     setFormColor(project.color);
-    setFormMembers(project.members);
+    setFormMembers(project.members as string[]);
     setEditingProject(project);
     setIsCreateOpen(true);
   };

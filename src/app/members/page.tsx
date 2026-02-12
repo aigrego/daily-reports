@@ -207,7 +207,10 @@ export default function MembersPage() {
 
   const getUserStats = (userId: string) => {
     const userReports = reports.filter((r) => r.userId === userId);
-    const userProjects = projects.filter((p) => p.members.includes(userId));
+    const userProjects = projects.filter((p) => {
+      const members = p.members as string[];
+      return members.includes(userId);
+    });
     return {
       reportCount: userReports.length,
       projectCount: userProjects.length,
