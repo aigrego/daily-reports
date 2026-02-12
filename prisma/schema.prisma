@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  displayName   String?  @map("display_name")
+  department    String
+  role          UserRole
+  password      String   // 加密后的密码密文
+  passwordSalt  String   @map("password_salt") // 密码盐值（校验位）
+  avatar        String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  reports       Report[]
+  projects      ProjectMember[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  name        String
+  description String
+  color       String
+  status      ProjectStatus @default(active)
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  members     ProjectMember[]
+  reports     ReportProject[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  projectId   String   @map("project_id")
+  userId      String   @map("user_id")
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, userId])
+  @@map("project_members")
+}
+
+model Report {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  date          String
+  completed     String   @db.Text
+  inProgress    String   @map("in_progress") @db.Text
+  problems      String   @db.Text
+  tomorrowPlan  String   @map("tomorrow_plan") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projects      ReportProject[]
+
+  @@map("reports")
+}
+
+model ReportProject {
+  reportId    String   @map("report_id")
+  projectId   String   @map("project_id")
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([reportId, projectId])
+  @@map("report_projects")
+}
+
+enum UserRole {
+  member
+  lead
+  admin
+}
+
+enum ProjectStatus {
+  active
+  archived
+}
