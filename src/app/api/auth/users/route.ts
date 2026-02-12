@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const users = await getUsers();
     
     // Return users for login page
-    const loginUsers = users.map(user => ({
+    const loginUsers = users.map((user: { id: string; name: string; department: string; role: string }) => ({
       id: user.id,
       name: user.name,
       department: user.department,
