@@ -1,9 +1,9 @@
 import { prisma } from './prisma';
 import { encryptPassword, verifyPassword, generateSalt, reencryptPassword } from './crypto';
-import type { UserRole, ProjectStatus } from '@prisma/client';
 
 // Re-export types
-export type { UserRole, ProjectStatus };
+export type UserRole = 'member' | 'lead' | 'admin';
+export type ProjectStatus = 'active' | 'archived';
 export { encryptPassword, verifyPassword, generateSalt, reencryptPassword };
 
 // User operations
