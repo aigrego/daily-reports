@@ -28,7 +28,7 @@ export async function GET(
     // Get full member details
     const users = await getUsers();
     const members = project.members
-      .map((memberId: string) => users.find((u) => u.id === memberId))
+      .map((memberId: string) => users.find((u: any) => u.id === memberId))
       .filter(Boolean)
       .map((user: any) => ({
         id: user!.id,
@@ -152,7 +152,7 @@ export async function PUT(
     // Get full member details
     const users = await getUsers();
     const members = project.members
-      .map((memberId: string) => users.find((u) => u.id === memberId))
+      .map((memberId: string) => users.find((u: any) => u.id === memberId))
       .filter(Boolean)
       .map((user: any) => ({
         id: user!.id,
